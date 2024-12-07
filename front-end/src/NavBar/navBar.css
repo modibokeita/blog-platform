@@ -1,0 +1,95 @@
+/* navBar.css */
+
+/* Base styles for the navbar */
+.navbar {
+  background-color: #333; /* Dark background for contrast */
+  color: #fff; /* White text */
+  padding: 10px 20px;
+  position: sticky;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Container for centering and layout */
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Logo styles */
+.logo img {
+  height: 50px; /* Adjust as needed */
+  width: auto;
+}
+
+/* Links section */
+.links {
+  display: flex;
+  align-items: center;
+  gap: 20px; /* Spacing between links */
+}
+
+/* Link styles */
+.link {
+  text-decoration: none;
+  color: #fff;
+  font-size: 16px;
+  transition: color 0.3s ease;
+}
+
+.link h6 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Hover effect on links */
+.link:hover {
+  color: #ff6347; /* Accent color for hover */
+}
+
+/* User and action links */
+span {
+  font-size: 14px;
+  font-weight: 400;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+span:hover {
+  color: #ff6347;
+}
+
+/* Special write link */
+.write {
+  padding: 5px 10px;
+  background-color: #ff6347;
+  border-radius: 5px;
+}
+
+.write .link {
+  color: #fff;
+  font-weight: bold;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .links {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .logo img {
+    height: 40px; /* Smaller logo on mobile */
+  }
+}

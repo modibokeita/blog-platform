@@ -1,26 +1,117 @@
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
+import { useState } from "react";
+import "./Home.css";
+
+const posts = [
+  {
+    id: 1,
+    title: "Lorem ipsum dolor sit amet consectetur adipisicing elit",
+    desc: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. A possimus excepturi aliquid nihil cumque ipsam facere aperiam at! Ea dolorem ratione sit debitis deserunt repellendus numquam ab vel perspiciatis corporis!",
+    img: "https://images.pexels.com/photos/7008010/pexels-photo-7008010.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+  },
+  {
+    id: 2,
+    title: "Lorem ipsum dolor sit amet consectetur adipisicing elit",
+    desc: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. A possimus excepturi aliquid nihil cumque ipsam facere aperiam at! Ea dolorem ratione sit debitis deserunt repellendus numquam ab vel perspiciatis corporis!",
+    img: "https://images.pexels.com/photos/6489663/pexels-photo-6489663.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+  },
+  {
+    id: 3,
+    title: "Lorem ipsum dolor sit amet consectetur adipisicing elit",
+    desc: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. A possimus excepturi aliquid nihil cumque ipsam facere aperiam at! Ea dolorem ratione sit debitis deserunt repellendus numquam ab vel perspiciatis corporis!",
+    img: "https://images.pexels.com/photos/4230630/pexels-photo-4230630.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+  },
+  {
+    id: 4,
+    title: "Lorem ipsum dolor sit amet consectetur adipisicing elit",
+    desc: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. A possimus excepturi aliquid nihil cumque ipsam facere aperiam at! Ea dolorem ratione sit debitis deserunt repellendus numquam ab vel perspiciatis corporis!",
+    img: "https://images.pexels.com/photos/6157049/pexels-photo-6157049.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+  },
+  {
+    id: 5,
+    title: "Lorem ipsum dolor sit amet consectetur adipisicing elit",
+    desc: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. A possimus excepturi aliquid nihil cumque ipsam facere aperiam at! Ea dolorem ratione sit debitis deserunt repellendus numquam ab vel perspiciatis corporis!",
+    img: "https://images.pexels.com/photos/6157049/pexels-photo-6157049.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+  },
+  {
+    id: 6,
+    title: "Lorem ipsum dolor sit amet consectetur adipisicing elit",
+    desc: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. A possimus excepturi aliquid nihil cumque ipsam facere aperiam at! Ea dolorem ratione sit debitis deserunt repellendus numquam ab vel perspiciatis corporis!",
+    img: "https://images.pexels.com/photos/6157049/pexels-photo-6157049.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+  },
+  {
+    id: 7,
+    title: "Lorem ipsum dolor sit amet consectetur adipisicing elit",
+    desc: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. A possimus excepturi aliquid nihil cumque ipsam facere aperiam at! Ea dolorem ratione sit debitis deserunt repellendus numquam ab vel perspiciatis corporis!",
+    img: "https://images.pexels.com/photos/6157049/pexels-photo-6157049.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+  },
+  {
+    id: 8,
+    title: "Lorem ipsum dolor sit amet consectetur adipisicing elit",
+    desc: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. A possimus excepturi aliquid nihil cumque ipsam facere aperiam at! Ea dolorem ratione sit debitis deserunt repellendus numquam ab vel perspiciatis corporis!",
+    img: "https://images.pexels.com/photos/6157049/pexels-photo-6157049.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+  },
+];
+
+const getText = (html) => {
+  const doc = new DOMParser().parseFromString(html, "text/html");
+  return doc.body.textContent;
+};
 
 function Home() {
-    return (
-        <div className="home">
-          <div className="posts">
+  const [currentPage, setCurrentPage] = useState(1);
+  const postsPerPage = 5;
 
-              <div className="post" >
-                <div className="img">
-                  <img src="" />
-                </div>
-                <div className="content">
-                  <Link className="link" to="">
-                    <h1>Tilte</h1>
-                  </Link>
-                  <p>description</p>
-                  <button>Read More</button>
-                </div>
-              </div>
+  // Calculate the indices of the posts to show
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
+
+  // Navigate to the next page
+  const nextPage = () => {
+    if (currentPage < Math.ceil(posts.length / postsPerPage)) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  // Navigate to the previous page
+  const prevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  return (
+    <div className="home">
+      <div className="posts">
+        {currentPosts.map((post) => (
+          <div className="post" key={post.id}>
+            <div className="img">
+              <img src={post.img} alt="Post Image" />
+            </div>
+            <div className="content">
+              <Link className="link" to={`/post/${post.id}`}>
+                <h1>{post.title}</h1>
+              </Link>
+              <p>{getText(post.desc)}</p>
+              <button>Read More</button>
+            </div>
           </div>
-        </div>
-      );
+        ))}
+      </div>
+      <div className="pagination">
+        <button onClick={prevPage} disabled={currentPage === 1}>
+          Back
+        </button>
+        <button
+          onClick={nextPage}
+          disabled={currentPage === Math.ceil(posts.length / postsPerPage)}
+        >
+          Next
+        </button>
+      </div>
+    </div>
+  );
 }
 
-export default Home
-
+export default Home;

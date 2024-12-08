@@ -109,9 +109,9 @@
     transition: background-color 0.3s ease;
   }
 
-  .file:hover {
+  /* .file:hover {
     background-color: #0056b3;
-  }
+  } */
 
   label.file {
     display: inline-block;

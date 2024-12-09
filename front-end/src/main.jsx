@@ -9,6 +9,7 @@ import NavBar from "./NavBar/NavBar.jsx";
 import Footer from "./Footer/Footer.jsx";
 import SinglePage from "./SinglePage/SinglePage.jsx";
 import PostBlog from "./PostBlog/PostBlog.jsx";
+import { AuthContexProvider } from "./Context/AuthContext.jsx";
 const Layout = () => {
   return (
     <>
@@ -49,6 +50,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <AuthContexProvider>
+      <RouterProvider router={router} />
+    </AuthContexProvider>
   </React.StrictMode>
 );

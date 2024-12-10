@@ -1,16 +1,69 @@
+import { useState, useRef } from "react";
 import ReactQuill from "react-quill";
-import  { useState } from "react";
 import "react-quill/dist/quill.snow.css";
-import "./postBlog.css"
+import axios from "axios";
+import { useLocation, useNavigate } from "react-router-dom";
+import moment from "moment";
+import "./postBlog.css";
+
 function PostBlog() {
-  const [value, setValue] = useState("");
-  console.log(value)
+  const state = useLocation().state;
+  const quillRef = useRef(null); // Add ref for ReactQuill
+  const [value, setValue] = useState(state?.title || "");
+  const [title, setTitle] = useState(state?.desc || "");
+  const [file, setFile] = useState(null);
+  const [cat, setCat] = useState(state?.cat || "");
+
+  const navigate = useNavigate();
+
+  const upload = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      const res = await axios.post("/api/upload", formData);
+      return res.data;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleClick = async (e) => {
+    e.preventDefault();
+    const imgUrl = await upload();
+
+    try {
+      state
+        ? await axios.put(`/api/posts/${state.id}`, {
+            title,
+            description: value,
+            cat,
+            img: file ? imgUrl : "",
+          })
+        : await axios.post(`/api/posts/`, {
+            title,
+            description: value,
+            cat,
+            img: file ? imgUrl : "",
+            date: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
+          });
+      navigate("/");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <div className="add">
       <div className="content">
-        <input type="text" name="" id="" placeholder="Title"/>
+        <input
+          type="text"
+          placeholder="Title"
+          onChange={(e) => setTitle(e.target.value)}
+          value={title}
+        />
         <div className="editorContainer">
-        <ReactQuill
+          <ReactQuill
+            ref={quillRef} // Attach ref here
             className="editor"
             theme="snow"
             value={value}
@@ -22,31 +75,73 @@ function PostBlog() {
         <div className="item">
           <h1>Publish</h1>
           <span>
-            <b>Status:</b> Draft
+            <b>Status: </b> Draft
           </span>
           <span>
-            <b>Visibility:</b> Public
+            <b>Visibility: </b> Public
           </span>
-          <input type="file" name="" id="file" />
-          <label htmlFor="file">Uplod Image</label>
+          <input
+            style={{ display: "none" }}
+            type="file"
+            id="file"
+            onChange={(e) => setFile(e.target.files[0])}
+          />
+          <label className="file" htmlFor="file">
+            Upload Image
+          </label>
           <div className="buttons">
-            <button>Save As Draft</button>
-            <button>Update</button>
+            <button>Save as a draft</button>
+            <button onClick={handleClick}>Publish</button>
           </div>
         </div>
         <div className="item">
           <h1>Category</h1>
-          <input type="radio" name="cat" id="art" value="art" />
-          <label htmlFor="art">Art</label>
-          <input type="radio" name="cat" id="science" value="science" />
-          <label htmlFor="science">Science</label>
-          <input type="radio" name="cat" id="technology" value="technology" />
-          <label htmlFor="technology">Technology</label>
-          <input type="radio" name="cat" id="design" value="design" />
-          <label htmlFor="design">Design</label>
+          <div className="cat">
+            <input
+              type="radio"
+              checked={cat === "art"}
+              name="cat"
+              value="art"
+              id="art"
+              onChange={(e) => setCat(e.target.value)}
+            />
+            <label htmlFor="art">Art</label>
+          </div>
+          <div className="cat">
+            <input
+              type="radio"
+              checked={cat === "science"}
+              name="cat"
+              value="science"
+              id="science"
+              onChange={(e) => setCat(e.target.value)}
+            />
+            <label htmlFor="science">Science</label>
+          </div>
+          <div className="cat">
+            <input
+              type="radio"
+              checked={cat === "technology"}
+              name="cat"
+              value="technology"
+              id="technology"
+              onChange={(e) => setCat(e.target.value)}
+            />
+            <label htmlFor="technology">Technology</label>
+          </div>
+          <div className="cat">
+            <input
+              type="radio"
+              checked={cat === "design"}
+              name="cat"
+              value="design"
+              id="design"
+              onChange={(e) => setCat(e.target.value)}
+            />
+            <label htmlFor="design">Design</label>
+          </div>
         </div>
       </div>
-
     </div>
   );
 }

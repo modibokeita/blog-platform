@@ -1,53 +1,82 @@
-import "./singlePage.css"
-
-import User from "../img/vector-users-icon.jpg";
+import  { useEffect, useState } from "react";
 import Edit from "../img/edit.png";
+import "./singlePage.css"
 import Delete from "../img/delete.png";
-import {Link} from "react-router-dom";
-import Menu from "../Menu/Menu";
-function SinglePage() {
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import Menu from "../Menu/Menu.jsx";
+import axios from "axios";
+import moment from "moment";
+import { useContext } from "react";
+import { AuthContext } from "../Context/AuthContext.jsx";
+import DOMPurify from "dompurify";
+
+const Single = () => {
+  const [post, setPost] = useState({});
+
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const postId = location.pathname.split("/")[2];
+
+  const { currentUser } = useContext(AuthContext);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get(`/api/posts/${postId}`);
+        setPost(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchData();
+  }, [postId]);
+
+  const handleDelete = async ()=>{
+    try {
+      await axios.delete(`/api/posts/${postId}`);
+      navigate("/")
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  // const getText = (html) =>{
+  //   const doc = new DOMParser().parseFromString(html, "text/html")
+  //   return doc.body.textContent
+  // }
 
   return (
-    <div className="single-post">
-     <div className="content">
-      <img src="https://images.pexels.com/photos/7008010/pexels-photo-7008010.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="" />
-     </div>
-     <div className="user">
-      <img src={User} alt="" />
-      <div className="info">
-        <span>Keita</span>
-        <p>Posted 2 days ago</p>
-      </div>
-      <div className="edit">
-        <Link to={`/write?edit=2`}>
-          <img src={Edit} alt="" />
-        </Link>
-        <Link>
-          <img src={Delete} alt="" />
-        </Link>
-      </div>
-     </div>
-     <h1>Lorem ipsum dolor sit amet consectetur adipisicing elit.</h1>
-     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloremque corrupti dolorum laudantium, iure nemo explicabo nostrum modi unde libero, accusamus eaque alias minus aperiam beatae numquam non ipsum? Quia, quis!
-     Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloremque corrupti dolorum laudantium, iure nemo explicabo nostrum modi unde libero, accusamus eaque alias minus aperiam beatae numquam non ipsum? Quia, quis!
-     Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloremque corrupti dolorum laudantium, iure nemo explicabo nostrum modi unde libero, accusamus eaque alias minus aperiam beatae numquam non ipsum? Quia, quis!
-     Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloremque corrupti dolorum laudantium, iure nemo explicabo nostrum modi unde libero, accusamus eaque alias minus aperiam beatae numquam non ipsum? Quia, quis!
-     Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloremque corrupti dolorum laudantium, iure nemo explicabo nostrum modi unde libero, accusamus eaque alias minus aperiam beatae numquam non ipsum? Quia, quis!
-     Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloremque corrupti dolorum laudantium, iure nemo explicabo nostrum modi unde libero, accusamus eaque alias minus aperiam beatae numquam non ipsum? Quia, quis!
-     </p>
-     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloremque corrupti dolorum laudantium, iure nemo explicabo nostrum modi unde libero, accusamus eaque alias minus aperiam beatae numquam non ipsum? Quia, quis!
-     Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloremque corrupti dolorum laudantium, iure nemo explicabo nostrum modi unde libero, accusamus eaque alias minus aperiam beatae numquam non ipsum? Quia, quis!
-     Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloremque corrupti dolorum laudantium, iure nemo explicabo nostrum modi unde libero, accusamus eaque alias minus aperiam beatae numquam non ipsum? Quia, quis!
-     Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloremque corrupti dolorum laudantium, iure nemo explicabo nostrum modi unde libero, accusamus eaque alias minus aperiam beatae numquam non ipsum? Quia, quis!
-     Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloremque corrupti dolorum laudantium, iure nemo explicabo nostrum modi unde libero, accusamus eaque alias minus aperiam beatae numquam non ipsum? Quia, quis!
-     Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloremque corrupti dolorum laudantium, iure nemo explicabo nostrum modi unde libero, accusamus eaque alias minus aperiam beatae numquam non ipsum? Quia, quis!
-     </p>
-     <h1>Other posts you may like</h1>
-      <Menu />
+    <div className="single">
+      <div className="content">
+        <img src={`/upload/${post?.img}`} alt="" />
+        <div className="user">
+          {post.userImg && <img
+            src={post.userImg}
+            alt=""
+          />}
+          <div className="info">
+            <span>Username:{post.username}</span>
+            <p>Posted {moment(post.date).fromNow()}</p>
+          </div>
+          {currentUser.username === post.username && (
+            <div className="edit">
+              <Link to={`/write?edit=2`} state={post}>
+                <img src={Edit} alt="" />
+              </Link>
+              <img onClick={handleDelete} src={Delete} alt="" />
+            </div>
+          )}
+        </div>
+        <h1>{post.title}</h1>
+        <p
+          dangerouslySetInnerHTML={{
+            __html: DOMPurify.sanitize(post.description),
+          }}
+        ></p>      </div>
+      <Menu cat={post.cat}/>
     </div>
   );
-}
+};
 
-export default SinglePage;
-
-
+export default Single;

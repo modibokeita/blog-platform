@@ -40,7 +40,7 @@ const Home = () => {
         {currentPosts.map((post) => (
           <div className="post" key={post.id}>
             <div className="img">
-            <img src={`/upload/${post.img}`} alt="Post image" />
+            <img src={`../upload/${post.img}`} alt="Post image" />
             </div>
             <div className="content">
               <Link className="link" to={`/api/post/${post.id}`}>

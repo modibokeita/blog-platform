@@ -34,6 +34,5 @@
     "globals": "^15.12.0",
     "sass": "^1.82.0",
     "vite": "^6.0.1"
-  },
-  "proxy": "http://localhost:8800/api/"
+  }
 }

@@ -9,6 +9,7 @@ import NavBar from "./NavBar/NavBar.jsx";
 import Footer from "./Footer/Footer.jsx";
 import SinglePage from "./SinglePage/SinglePage.jsx";
 import PostBlog from "./PostBlog/PostBlog.jsx";
+import UserProfile from "./UserProfile/UserProfile.jsx";
 import { AuthContexProvider } from "./Context/AuthContext.jsx";
 const Layout = () => {
   return (
@@ -29,12 +30,16 @@ const router = createBrowserRouter([
         element: <App />
       },
       {
-        path: "/post/:id",
+        path: "/api/post/:id",
         element: <SinglePage />,
       },
       {
         path: "/write",
         element: <PostBlog />,
+      },
+      {
+        path: "user-profile",
+        element: <UserProfile />,
       },
     ]
   },
@@ -46,6 +51,7 @@ const router = createBrowserRouter([
     path: "register",
     element: <Register />,
   },
+
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(

@@ -9,6 +9,7 @@ import DefaultProfile from "../img/user.jpg";
 import { AuthContext } from "../Context/AuthContext.jsx";
 import "./singlePage.css";
 import Menu from "../Menu/Menu.jsx"
+
 const SinglePage = () => {
   const [post, setPost] = useState(null);
   const location = useLocation();

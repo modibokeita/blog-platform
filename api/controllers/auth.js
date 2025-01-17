@@ -19,14 +19,14 @@ const upload = multer({ storage: storage });
 
 // Register user and upload profile picture
 export const register = (req, res) => {
-  upload.single('img')(req, res, (err) => { // 'img' is the key from the form
+  upload.single('img')(req, res, (err) => { 
     if (err) {
       return res.status(500).json({ error: "Image upload failed", details: err });
     }
 
     const { email, username, password } = req.body;
-    const imgPath = req.file ? req.file.filename : null; // Get the uploaded image filename
-
+    const imgPath = req.file ? req.file.filename : null;
+    // check if user exist already
     const q = "SELECT * FROM users WHERE email = ? OR username = ?";
     db.query(q, [email, username], (err, data) => {
       if (err) return res.status(500).json(err);
@@ -40,7 +40,7 @@ export const register = (req, res) => {
         email,
         username,
         hash,
-        imgPath // Save the image filename to the database
+        imgPath
       ];
 
       db.query(insertQuery, values, (err) => {
@@ -66,7 +66,7 @@ export const login = (req, res) => {
 
     res.cookie("access_token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production', // Secure cookie in production
+      secure: process.env.NODE_ENV === 'production', 
       sameSite: "lax", // CSRF protection
     }).status(200).json(other);
   });

@@ -7,7 +7,6 @@ const Home = () => {
   const [posts, setPosts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(4);
-
   const cat = useLocation().search;
 
   useEffect(() => {

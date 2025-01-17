@@ -3,7 +3,7 @@ import "./navBar.css";
 import { AuthContext } from "../Context/AuthContext";
 import Logo from "../img/logo.png";
 import { useContext } from "react";
-import DefaultProfile from "../img/user.jpg"; // Import the default profile image
+import DefaultProfile from "../img/user.jpg";
 
 function NavBar() {
   const { currentUser, logout } = useContext(AuthContext);

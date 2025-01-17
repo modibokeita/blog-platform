@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../Context/AuthContext.jsx";
 import "./userProfile.css";
 import DefaultProfile from "../img/user.jpg";
+
 const UserProfile = () => {
   const { currentUser } = useContext(AuthContext);  // Access currentUser from AuthContext
   const [user, setUser] = useState({});

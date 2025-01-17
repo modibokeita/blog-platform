@@ -6,7 +6,7 @@ export const getPosts = (req, res) => {
   const q = req.query.cat
     ? "SELECT * FROM posts WHERE cat = ?"
     : "SELECT * FROM posts";
-
+  
   const params = req.query.cat ? [req.query.cat] : [];
   db.query(q, params, (err, data) => {
     if (err) return res.status(500).json({ error: err.message });
@@ -58,7 +58,7 @@ export const addPost = (req, res) => {
       req.body.description,
       req.body.img,
       req.body.cat || null, // Allow NULL for category
-      new Date(), // Automatically set the current timestamp
+      new Date(), 
       userInfo.id,
     ];
 
@@ -110,7 +110,7 @@ export const updatePost = (req, res) => {
       req.body.title,
       req.body.description,
       req.body.img,
-      req.body.cat || null, // Allow NULL for category
+      req.body.cat || null, 
     ];
 
     db.query(q, [...values, postId, userInfo.id], (err, data) => {

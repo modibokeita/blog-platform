@@ -8,7 +8,7 @@ function Register() {
     username: "",
     email: "",
     password: "",
-    img: null // Add img to hold the file
+    img: null 
   });
   const [error, setError] = useState(null);
   const navigate = useNavigate();

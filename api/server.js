@@ -6,6 +6,7 @@ import cors from "cors";
 import cookieParser from 'cookie-parser';
 import multer from "multer";
 const app = express();
+
 app.use(cors({
     origin: "http://localhost:5173", // Replace with your frontend URL
     methods: ["POST", "GET", "PUT", "DELETE"],

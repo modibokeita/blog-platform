@@ -14,7 +14,7 @@ const storage = multer.diskStorage({
     cb(null, Date.now() + ext); // Use timestamp as filename
   }
 });
-
+// upload file
 const upload = multer({ storage: storage });
 
 // Register user and upload profile picture

@@ -1,6 +1,6 @@
 /* Base styles for the navbar */
 .navbar {
-  background-color: #333; /* Dark background for contrast */
+  background-color: #333; 
   color: #fff; /* White text */
   padding: 10px 20px;
   position: sticky;

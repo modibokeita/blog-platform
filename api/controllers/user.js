@@ -15,11 +15,11 @@ export const getUser = (req, res) => {
   });
 };
 
-// Update User Profile
+// Update User Profile 
 export const updateUser = (req, res) => {
   const userId = req.params.id;
 
-  // Ensure the user is updating their own profile
+  // Ensure the user is updating their own profile 
   if (userId !== req.user.id) {
     return res.status(403).json("You can only update your own profile");
   }
